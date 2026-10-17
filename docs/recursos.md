@@ -107,7 +107,7 @@ Presenta el método desde la envolvente de Snell y deriva los estimadores alto y
 
 - Copia local: `../references/curso/notas-finanzas-cuantitativas-2026.pdf`
 
-Material del curso. Sirven de fondo las páginas 20, 24, 37, 40 y 58 para opciones americanas, la página 63 para simulación de Monte Carlo y las páginas 74 a 80 para el modelo trinomial discreto y las medidas de martingala. El trinomial del curso recombina y se construye con un modelo discreto; el árbol de Broadie-Glasserman no recombina y se genera simulando el movimiento geométrico browniano. Esa diferencia es la que pide la consigna.
+Material del curso. Sirven de fondo las páginas 20, 24, 37, 40 y 58 para opciones americanas, la página 63 para simulación de Monte Carlo y las páginas 74 a 80 para el modelo trinomial discreto y las medidas de martingala. El trinomial del curso recombina y se construye con un modelo discreto. El árbol de Broadie-Glasserman no recombina y se genera simulando el movimiento geométrico browniano. Esa diferencia es la que pide la consigna.
 
 **Matemática Financiera (2010). Colección Las Ciencias Naturales y la Matemática, Ministerio de Educación de Argentina.**
 
@@ -123,8 +123,8 @@ Pide estudiar el método para `b = 3`, valorar opciones americanas por simulaci�
 
 ## Implementaciones
 
-- `cantaro86/Financial-Models-Numerical-Methods`: [repositorio](https://github.com/cantaro86/Financial-Models-Numerical-Methods). Cuadernos de métodos numéricos en Python. Tiene un cuaderno de opciones americanas con Longstaff-Schwartz, útil para comparar.
-- QuantLib: [quantlib.org](https://www.quantlib.org/). Biblioteca en C++ con árboles binomiales y trinomiales. No implementa el árbol aleatorio, pero sirve como referencia de precios.
+- `cantaro86/Financial-Models-Numerical-Methods`: [repositorio](https://github.com/cantaro86/Financial-Models-Numerical-Methods). Cuadernos de métodos numéricos en Python. Tiene un cuaderno de opciones americanas con Longstaff-Schwartz.
+- QuantLib: [quantlib.org](https://www.quantlib.org/). Biblioteca en C++ con árboles binomiales y trinomiales. No implementa el árbol aleatorio.
 - GitHub topic `american-options`: [github.com/topics/american-options](https://github.com/topics/american-options).
 
 ## Videos y cursos

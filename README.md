@@ -17,15 +17,24 @@ python -m pip install -e ".[dev]"
 python -m pytest
 ```
 
-El paquete depende de numpy. Las dependencias de desarrollo son pytest y ruff. Los tests cubren el payoff, el valor europeo, los dos estimadores, el intervalo de confianza y el control variate.
-
 ## Reproducir la Tabla 1
 
 ```bash
 python scripts/reproduce_table1.py --branches 50 --replications 100
 ```
 
-El script recorre `S(0)` de 70 a 130 con los parámetros del paper: `K = 100`, `r = 0.05`, `delta = 0.10`, `T = 1`, `sigma = 0.2` y `d = 3`. `--branches` fija la cantidad de ramas por nodo y `--replications` fija la cantidad de árboles. Imprime una fila por precio inicial con el estimador bajo, el estimador alto, el intervalo del 90 por ciento, el precio puntual, el valor verdadero del paper y el error relativo. Los valores quedan cerca de los de la Tabla 1, pero no son idénticos: el script genera sus propios caminos aleatorios.
+`S(0)` es el precio inicial del activo. El script recorre `S(0)` de 70 a 130 con los valores del paper:
+
+- `K = 100`: precio de ejercicio.
+- `r = 0.05`: tasa libre de riesgo anual, en forma continua.
+- `delta = 0.10`: tasa de dividendos anual, en forma continua.
+- `sigma = 0.2`: volatilidad anual.
+- `T = 1`: madurez, en años.
+- `d = 3`: cantidad de pasos entre fechas de ejercicio.
+
+`--branches` fija la cantidad de ramas por nodo y `--replications` fija la cantidad de árboles.
+
+El script imprime una fila por precio inicial. Cada fila trae el estimador bajo, el estimador alto, el intervalo del 90 por ciento y el precio puntual. Las dos últimas columnas muestran el valor verdadero del paper y el error relativo. Los valores quedan cerca de los de la Tabla 1, pero no son idénticos. El script genera sus propios caminos aleatorios.
 
 ## Precio desde Python
 
@@ -47,6 +56,8 @@ result = price_american(
 
 print(result.low_mean, result.high_mean, result.ci_low, result.ci_high)
 ```
+
+`result.low_mean` y `result.high_mean` son las medias de los estimadores bajo y alto. `result.ci_low` y `result.ci_high` son los límites del intervalo de confianza.
 
 La descripción de cada argumento y de cada campo del resultado está en `docs/referencia-api.md`.
 

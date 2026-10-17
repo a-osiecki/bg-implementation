@@ -139,7 +139,7 @@ La función `simulate_levels(market, option, steps, branching, rng)` genera los 
 
 La función `tree_estimates(levels, market, option, branching)` recorre los niveles al revés. En la madurez calcula el payoff. En cada nivel anterior reconstruye la matriz de hijos, calcula el promedio de las ramas y aplica las fórmulas del estimador alto y del estimador bajo. La operación `where` de numpy aplica la decisión de ejercicio de las `b` pasadas del estimador bajo a la vez.
 
-Esta estrategia guarda `O(b^d)` precios y usa operaciones vectorizadas. El Apéndice C del paper usa un recorrido en profundidad con `O(b d)` memoria. Para los tamaños de este trabajo práctico la memoria no es un problema, y la versión vectorizada es más rápida en Python. Una recursión en profundidad como la del Apéndice C cambiaría memoria por velocidad.
+Esta estrategia guarda `O(b^d)` precios y usa operaciones vectorizadas. El Apéndice C del paper usa un recorrido en profundidad con `O(b d)` memoria. Para los tamaños de este trabajo práctico la memoria no es un problema, y la versión vectorizada es más rápida en Python. Una recursión en profundidad como la del Apéndice C usaría `O(b d)` memoria en lugar de `O(b^d)`, a costa de velocidad.
 
 La descripción de cada función está en `docs/referencia-api.md`.
 
@@ -191,4 +191,4 @@ Un orden de lectura posible que combina el paper con los demás recursos:
 6. El capítulo 8 de Glasserman (2003), para una exposición de texto.
 7. Broadie y Glasserman (2004), para la malla estocástica en dimensión alta.
 
-La consigna del trabajo práctico pide `b = 3`. Con ese valor el sesgo de los dos estimadores es grande y el intervalo queda ancho; sirve como punto de partida y para mostrar la convergencia al aumentar `b`.
+La consigna del trabajo práctico pide `b = 3`. Con ese valor el sesgo de los dos estimadores es grande y el intervalo queda ancho. Sirve como punto de partida y para mostrar la convergencia al aumentar `b`.
