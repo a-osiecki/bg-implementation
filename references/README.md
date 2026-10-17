@@ -1,6 +1,6 @@
 # Referencias
 
-Coplas locales de los materiales de estudio. La fecha de descarga es el 17 de octubre de 2026.
+Copias locales de los materiales de estudio. La fecha de descarga es el 17 de octubre de 2026.
 
 | Archivo | Cita | Origen |
 | --- | --- | --- |

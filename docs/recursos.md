@@ -1,4 +1,4 @@
-# Recursos para estudiar el tema
+# Recursos
 
 Esta lista reúne el paper original, los trabajos de los mismos autores, los métodos que compiten con Broadie-Glasserman y el material de fondo. Las copias locales están en `references/` y solo se incluyen para estudio personal.
 
@@ -10,7 +10,7 @@ Esta lista reúne el paper original, los trabajos de los mismos autores, los mé
 - DOI: [10.1016/S0165-1889(97)00029-8](https://doi.org/10.1016/S0165-1889(97)00029-8)
 - Espejo en el sitio de Axel Kind: [broadie_glasserman_1997_jedc.pdf](http://www.axelkind.com/teaching/financial_derivatives/papers/broadie_glasserman_1997_jedc.pdf)
 
-Es la referencia obligada. La sección 2 explica la intuición con las Figuras 1 a 6. La sección 3 fija la notación y enuncia los Teoremas 1 a 5. La sección 4 tiene las Tablas 1 a 6 y el control variate. El Apéndice C trae el pseudocódigo del recorrido en profundidad.
+La sección 2 explica la intuición con las Figuras 1 a 6. La sección 3 fija la notación y enuncia los Teoremas 1 a 5. La sección 4 tiene las Tablas 1 a 6 y el control variate. El Apéndice C trae el pseudocódigo del recorrido en profundidad.
 
 ## Papers de los mismos autores
 
@@ -37,7 +37,7 @@ Es un relevamiento general de simulación en finanzas. Ubica a Broadie-Glasserma
 
 - Enlace: [v7n4a3_Broadie.pdf](http://www.columbia.edu/~mnb2/broadie/Assets/v7n4a3_Broadie.pdf)
 
-Reemplaza el árbol por una malla de estados simulados. Cada nodo se conecta con todos los nodos del nivel siguiente con pesos, así que la cantidad de conexiones deja de crecer exponencialmente. Es la continuación natural del método para dimensión alta.
+Reemplaza el árbol por una malla de estados simulados. Cada nodo se conecta con todos los nodos del nivel siguiente con pesos, así que la cantidad de conexiones deja de crecer exponencialmente. Es la extensión del método a dimensión alta.
 
 ## Métodos alternativos
 
@@ -47,13 +47,13 @@ Reemplaza el árbol por una malla de estados simulados. Cada nodo se conecta con
 - DOI: [10.1093/rfs/14.1.113](https://doi.org/10.1093/rfs/14.1.113)
 - PDF de la ETH: [LongstaffSchwartzAmericanOptionsLeastSquareMonteCarlo.pdf](https://people.math.ethz.ch/~hjfurrer/teaching/LongstaffSchwartzAmericanOptionsLeastSquareMonteCarlo.pdf)
 
-El método de regresión por mínimos cuadrados, hoy el más usado en la práctica. En lugar de un árbol, estima el valor de continuación con una regresión sobre los caminos. Maneja muchas fechas de ejercicio sin costo exponencial. El paper compara sus valores con las cotas de Broadie-Glasserman.
+El método de regresión por mínimos cuadrados. En lugar de un árbol, estima el valor de continuación con una regresión sobre los caminos. Maneja muchas fechas de ejercicio sin costo exponencial. El paper compara sus valores con las cotas de Broadie-Glasserman.
 
 **Tilley, J. (1993). Valuing American options in a path simulation model. Transactions of the Society of Actuaries 45, 83-104.**
 
 - PDF en ResearchGate: [Valuing American Options in a Path Simulation Model](https://www.researchgate.net/profile/James-Tilley-4/publication/237326444_111_Valuing_American_Options_in_a_Path_Simulation_Model/links/5cc33b84299bf12097827fb1/111-Valuing-American-Options-in-a-Path-Simulation-Model.pdf)
 
-El primer intento serio de valorar americanas con simulación. Agrupa caminos por precio y estima una decisión de ejercicio por grupo. Tiene problemas de convergencia y de almacenamiento, y el paper de 1997 los discute en la introducción.
+El primer intento de valorar opciones americanas con simulación. Agrupa caminos por precio y estima una decisión de ejercicio por grupo. Tiene problemas de convergencia y de almacenamiento, y el paper de 1997 los discute en la introducción.
 
 **Barraquand, J. y Martineau, D. (1995). Numerical valuation of high dimensional multivariate American securities. Journal of Financial and Quantitative Analysis 30(3), 383-405.**
 
@@ -73,19 +73,19 @@ Estima el valor de continuación con splines. Es un antecedente de la regresión
 
 - DOI: [10.1007/978-0-387-21617-1](https://doi.org/10.1007/978-0-387-21617-1)
 
-El capítulo 8 cubre las opciones americanas por simulación: árbol aleatorio, estimadores alto y bajo, reducción de varianza y formulaciones duales. Es la mejor exposición de texto después del paper.
+El capítulo 8 cubre las opciones americanas por simulación: árbol aleatorio, estimadores alto y bajo, reducción de varianza y formulaciones duales.
 
 **Hull, J. (2021). Options, Futures, and Other Derivatives. Pearson.**
 
 - Página del libro: [pearson.com](https://www.pearson.com/en-us/subject-catalog/p/options-futures-and-other-derivatives/P200000005938)
 
-Cubre opciones americanas, árboles binomiales y procedimientos numéricos en general. Sirve para el fondo de valoración neutral al riesgo.
+Cubre opciones americanas, árboles binomiales y procedimientos numéricos en general.
 
 **Baxter, M. y Rennie, A. (1996). Financial Calculus: An Introduction to Derivative Pricing. Cambridge University Press.**
 
 - Página del libro: [cambridge.org](https://www.cambridge.org/us/universitypress/subjects/mathematics/mathematical-finance/financial-calculus-introduction-derivative-pricing)
 
-Introducción corta y clara a la valoración neutral al riesgo y a las martingalas.
+Introducción a la valoración neutral al riesgo y a las martingalas.
 
 ## Tesis, notas y material del curso
 
@@ -94,7 +94,7 @@ Introducción corta y clara a la valoración neutral al riesgo y a las martingal
 - Enlace: [DIVA fulltext](https://www.diva-portal.org/smash/get/diva2:479155/FULLTEXT01.pdf)
 - Registro: [diva2:479155](https://www.diva-portal.org/smash/record.jsf?pid=diva2%3A479155)
 
-Explica el árbol aleatorio paso a paso y lo compara numéricamente con otros métodos. Desde esta red el sitio de DiVA no respondió, pero el enlace es el oficial.
+Explica el árbol aleatorio paso a paso y lo compara numéricamente con otros métodos.
 
 **Wieslander, P. (2013). On Monte Carlo approximation of the Snell envelope with application to the pricing of American options. Tesis de maestría, Lund University.**
 
@@ -107,7 +107,7 @@ Presenta el método desde la envolvente de Snell y deriva los estimadores alto y
 
 - Copia local: `../references/curso/notas-finanzas-cuantitativas-2026.pdf`
 
-Material del curso. Las páginas del PDF que sirven de fondo: opciones americanas en las páginas 20, 24, 37, 40 y 58; simulación de Monte Carlo en la página 63; modelo trinomial discreto y medidas de martingala en las páginas 74 a 80. El trinomial del curso recombinan y se construyen con un modelo discreto; el árbol de Broadie-Glasserman no recombina y se genera simulando el movimiento geométrico browniano. Esa diferencia es la que pide la consigna.
+Material del curso. Sirven de fondo las páginas 20, 24, 37, 40 y 58 para opciones americanas, la página 63 para simulación de Monte Carlo y las páginas 74 a 80 para el modelo trinomial discreto y las medidas de martingala. El trinomial del curso recombina y se construye con un modelo discreto. El árbol de Broadie-Glasserman no recombina y se genera simulando el movimiento geométrico browniano. Esa diferencia es la que pide la consigna.
 
 **Matemática Financiera (2010). Colección Las Ciencias Naturales y la Matemática, Ministerio de Educación de Argentina.**
 
@@ -123,21 +123,11 @@ Pide estudiar el método para `b = 3`, valorar opciones americanas por simulaci�
 
 ## Implementaciones
 
-- `cantaro86/Financial-Models-Numerical-Methods`: [repositorio](https://github.com/cantaro86/Financial-Models-Numerical-Methods). Cuadernos de métodos numéricos en Python. Tiene un cuaderno de opciones americanas con Longstaff-Schwartz, útil para comparar.
-- QuantLib: [quantlib.org](https://www.quantlib.org/). Biblioteca en C++ con árboles binomiales y trinomiales. No implementa el árbol aleatorio, pero sirve como referencia de precios.
+- `cantaro86/Financial-Models-Numerical-Methods`: [repositorio](https://github.com/cantaro86/Financial-Models-Numerical-Methods). Cuadernos de métodos numéricos en Python. Tiene un cuaderno de opciones americanas con Longstaff-Schwartz.
+- QuantLib: [quantlib.org](https://www.quantlib.org/). Biblioteca en C++ con árboles binomiales y trinomiales. No implementa el árbol aleatorio.
 - GitHub topic `american-options`: [github.com/topics/american-options](https://github.com/topics/american-options).
 
 ## Videos y cursos
 
 - *American Monte-Carlo, Bermudan Options (1/2)*: [youtube.com/watch?v=Q4vfoDUkTsM](https://www.youtube.com/watch?v=Q4vfoDUkTsM). Sesión sobre Monte Carlo americano y opciones bermudas. No sigue el paper, pero cubre el mismo problema.
 - Búsqueda en YouTube: [Broadie Glasserman American option simulation](https://www.youtube.com/results?search_query=broadie+glasserman+american+option+simulation).
-
-## Un orden de lectura posible
-
-1. El paper de 1997, secciones 1 y 2.
-2. La guía `metodo.md` de este repositorio y una corrida de `scripts/reproduce_table1.py --quick`.
-3. El paper de 1997, sección 3 y Apéndice A.
-4. El paper de 1997, sección 4 y el paper de Jain y Glasserman para el control variate.
-5. Longstaff y Schwartz para comparar con el método de regresión.
-6. El capítulo 8 de Glasserman para una exposición de texto.
-7. La malla estocástica de 2004 para dimensión alta.
