@@ -1,6 +1,8 @@
 """Tests de la estimación con n réplicas y del intervalo de confianza."""
 
+import math
 import unittest
+from unittest import mock
 
 from bg_pricing.model import Market, Option
 from bg_pricing.pricing import price_american
@@ -52,6 +54,26 @@ class PricingTests(unittest.TestCase):
         )
         self.assertLess(adjusted.low_stderr, plain.low_stderr)
         self.assertLess(adjusted.high_stderr, plain.high_stderr)
+
+    def test_control_variate_off_skips_european(self):
+        with mock.patch(
+            "bg_pricing.pricing.black_scholes_european",
+            side_effect=AssertionError("no se calcula el valor europeo"),
+        ):
+            result = price_american(
+                PAPER_MARKET,
+                PAPER_CALL,
+                steps=3,
+                branching=3,
+                replications=10,
+                seed=5,
+            )
+        self.assertTrue(math.isnan(result.european_mean))
+        self.assertTrue(math.isnan(result.european_true))
+
+    def test_requires_at_least_one_step(self):
+        with self.assertRaises(ValueError):
+            price_american(PAPER_MARKET, PAPER_CALL, steps=0, branching=3, replications=10)
 
     def test_requires_two_replications(self):
         with self.assertRaises(ValueError):

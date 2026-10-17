@@ -17,12 +17,10 @@ class TreeEstimate:
 
     high: estimador alto, sesgado hacia arriba.
     low: estimador bajo, sesgado hacia abajo.
-    european: valor europeo sobre el mismo árbol, para el control variate.
     """
 
     high: float
     low: float
-    european: float
 
 
 def simulate_levels(
@@ -41,15 +39,12 @@ def simulate_levels(
 
     Devuelve una lista de steps + 1 arreglos con los precios de cada nivel.
     """
-    if steps < 0:
-        raise ValueError("steps no puede ser negativo")
+    if steps < 1:
+        raise ValueError("steps tiene que ser al menos 1")
     if branching < 2:
         raise ValueError("branching tiene que ser al menos 2 para el estimador bajo")
 
     levels = [np.array([market.spot], dtype=float)]
-    if steps == 0:
-        return levels
-
     dt = option.maturity / steps
     drift = (market.rate - market.dividend - 0.5 * market.volatility**2) * dt
     volatility = market.volatility * np.sqrt(dt)
@@ -74,9 +69,8 @@ def tree_estimates(
     Las fórmulas son las ecuaciones (2) a (6) del paper.
     """
     steps = len(levels) - 1
-    if steps == 0:
-        value = float(payoff(levels[0][0], option))
-        return TreeEstimate(high=value, low=value, european=value)
+    if steps < 1:
+        raise ValueError("steps tiene que ser al menos 1")
 
     expected_sizes = [branching**t for t in range(steps + 1)]
     actual_sizes = [int(level.size) for level in levels]
@@ -91,7 +85,6 @@ def tree_estimates(
 
     high = np.asarray(payoff(levels[steps], option), dtype=float)
     low = high.copy()
-    european = high.copy()
 
     for t in range(steps - 1, -1, -1):
         intrinsic = np.asarray(payoff(levels[t], option), dtype=float)
@@ -110,10 +103,4 @@ def tree_estimates(
             low_children,
         ).mean(axis=1)
 
-        european = discount * european.reshape(-1, branching).mean(axis=1)
-
-    return TreeEstimate(
-        high=float(high[0]),
-        low=float(low[0]),
-        european=float(european[0]),
-    )
+    return TreeEstimate(high=float(high[0]), low=float(low[0]))

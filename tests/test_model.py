@@ -45,15 +45,16 @@ class BlackScholesTests(unittest.TestCase):
         )
         self.assertAlmostEqual(call_value - put_value, forward, places=8)
 
-    def test_zero_volatility(self):
+    def test_zero_volatility_raises(self):
         market = Market(spot=100.0, rate=0.05, dividend=0.0, volatility=0.0)
         call = Option(strike=90.0, maturity=1.0, kind="call")
-        expected = 100.0 - 90.0 * math.exp(-0.05)
-        self.assertAlmostEqual(black_scholes_european(market, call), expected, places=8)
+        with self.assertRaises(ValueError):
+            black_scholes_european(market, call)
 
-    def test_zero_maturity(self):
+    def test_zero_maturity_raises(self):
         option = Option(strike=100.0, maturity=0.0, kind="call")
-        self.assertAlmostEqual(black_scholes_european(self.market, option), 0.0)
+        with self.assertRaises(ValueError):
+            black_scholes_european(self.market, option)
 
 
 if __name__ == "__main__":

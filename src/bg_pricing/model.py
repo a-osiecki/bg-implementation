@@ -75,18 +75,13 @@ def payoff(spot: float | np.ndarray, option: Option) -> np.ndarray | np.floating
 def black_scholes_european(market: Market, option: Option) -> float:
     """Precio europeo de Black-Scholes con dividendos continuos.
 
-    Se usa como valor de referencia del control variate. Para volatilidad
-    cero el precio es el valor descontado del payoff del precio terminal.
+    Se usa como valor de referencia del control variate. Exige volatilidad y
+    madurez positivas.
     """
-    if option.maturity == 0.0:
-        return float(payoff(market.spot, option))
-
-    if market.volatility == 0.0:
-        stock = market.spot * exp(-market.dividend * option.maturity)
-        strike = option.strike * exp(-market.rate * option.maturity)
-        if option.kind == "call":
-            return max(stock - strike, 0.0)
-        return max(strike - stock, 0.0)
+    if option.maturity <= 0.0:
+        raise ValueError("maturity tiene que ser positiva")
+    if market.volatility <= 0.0:
+        raise ValueError("volatility tiene que ser positiva")
 
     root_t = sqrt(option.maturity)
     d1 = (
