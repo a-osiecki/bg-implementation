@@ -11,11 +11,11 @@ Los issues y las specs de este repo viven en GitHub Issues. Todas las operacione
 - **Agregar o quitar labels**: `gh issue edit <number> --add-label "..."` / `--remove-label "..."`.
 - **Cerrar**: `gh issue close <number> --comment "..."`.
 
-El repo se infiere de `git remote -v`; `gh` lo resuelve solo cuando corre dentro del clon.
+El repo se infiere de `git remote -v`. `gh` lo resuelve solo cuando corre dentro del clon.
 
 ## Pull requests as a request surface
 
-**PRs as a request surface: no.** _(Poner en yes si el repo trata PRs externos como pedidos de features; `/triage` lee este flag.)_
+**PRs as a request surface: no.** _(Poner en yes si el repo trata PRs externos como pedidos de features. `/triage` lee este flag.)_
 
 Cuando el flag está en yes, los PRs pasan por los mismos labels y estados que los issues, con los equivalentes de `gh pr`:
 
