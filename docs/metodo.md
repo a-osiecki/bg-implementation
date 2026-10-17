@@ -117,9 +117,9 @@ Se simulan `n` árboles independientes. Cada árbol produce una pareja `(L_i, H_
 [ max( h(0, S(0)), L_barra - z * s_L / sqrt(n) ),  H_barra + z * s_H / sqrt(n) ]
 ```
 
-donde `z` es el cuantil `1 - alpha / 2` de la normal estándar y el nivel de confianza es `1 - alpha`. Para un 90 por ciento, `z = 1.645`. El límite inferior se trunca en el payoff de ejercicio inmediato, que es una cota inferior obvia del precio.
+donde `z` es el cuantil `1 - alpha / 2` de la normal estándar y el nivel de confianza es `1 - alpha`. Para un 90 por ciento, `z = 1.645`. El límite inferior se trunca en el payoff de ejercicio inmediato, que es una cota inferior del precio.
 
-El intervalo es conservador. El límite inferior usa el sesgo hacia abajo y el límite superior usa el sesgo hacia arriba, y cada uno es un límite unilateral. Por eso la cobertura real supera a la nominal. La sección 4 del paper lo muestra con 1000 corridas: intervalos calculados con `z = 0.5`, que corresponden a un 38 por ciento nominal, contienen el valor verdadero en más del 90 por ciento de los casos.
+El intervalo es conservador. El límite inferior usa el sesgo hacia abajo y el límite superior usa el sesgo hacia arriba, y cada uno es un límite unilateral. Por eso la cobertura real supera a la nominal. La sección 4 del paper lo muestra con 1000 corridas. Un intervalo calculado con `z = 0.5`, que corresponde a un 38 por ciento nominal, contiene el valor verdadero en más del 90 por ciento de los casos.
 
 El precio puntual que sugiere el paper es el promedio de los dos estimadores, con el mismo truncamiento:
 
@@ -131,9 +131,17 @@ punto = 0.5 * max( h(0, S(0)), L_barra ) + 0.5 * H_barra
 
 El árbol tiene `b^d` nodos terminales. El trabajo crece exponencialmente con la cantidad de fechas de ejercicio, no con la cantidad de factores de riesgo. Esa es la ventaja del método frente a las grillas cuando hay varios factores. Una corrida con `b = 50` y `d = 3` tiene 125000 nodos terminales por árbol.
 
-La memoria puede ser chica. El Apéndice C del paper recorre el árbol en profundidad y usa `O(b d)` posiciones. La implementación de este repositorio recorre el árbol por niveles y guarda todos los precios, así que usa `O(b^d)` memoria a cambio de operaciones vectorizadas. Para los tamaños del trabajo práctico la diferencia no importa.
+El método se paraleliza: cada árbol es independiente de los demás.
 
-El método se paraleliza sin dificultad: cada árbol es independiente de los demás.
+## Cómo recorre el árbol esta implementación
+
+La función `simulate_levels(market, option, steps, branching, rng)` genera los precios por niveles. Primero dibuja todos los shocks del nivel 1, después los del nivel 2, y así hasta la madurez. Cada fila de shocks produce las `b` ramas de un nodo. El nivel `t`, con `t` de 0 a `d`, queda como un arreglo de `b^t` precios.
+
+La función `tree_estimates(levels, market, option, branching)` recorre los niveles al revés. En la madurez calcula el payoff. En cada nivel anterior reconstruye la matriz de hijos, calcula el promedio de las ramas y aplica las fórmulas del estimador alto y del estimador bajo. La operación `where` de numpy aplica la decisión de ejercicio de las `b` pasadas del estimador bajo a la vez.
+
+Esta estrategia guarda `O(b^d)` precios y usa operaciones vectorizadas. El Apéndice C del paper usa un recorrido en profundidad con `O(b d)` memoria. Para los tamaños de este trabajo práctico la memoria no es un problema, y la versión vectorizada es más rápida en Python. Una recursión en profundidad como la del Apéndice C cambiaría memoria por velocidad.
+
+La descripción de cada función está en `docs/referencia-api.md`.
 
 ## Control variate
 
@@ -173,4 +181,14 @@ Los estimadores usan una cantidad finita de fechas de ejercicio. Para aproximar 
 | Apéndice B | no existe un estimador insesgado general |
 | Apéndice C | pseudocódigo en profundidad, memoria `O(b d)` |
 
-Para el trabajo práctico conviene leer primero las secciones 2 y 3, correr `scripts/reproduce_table1.py` y después mirar las demostraciones del Apéndice A. La consigna pide `b = 3`. Con `b = 3` el sesgo de los dos estimadores es grande y el intervalo queda ancho; sirve como punto de partida y para mostrar la convergencia al aumentar `b`.
+Un orden de lectura posible que combina el paper con los demás recursos:
+
+1. El paper de 1997, secciones 1 y 2.
+2. Este documento y una corrida de `python scripts/reproduce_table1.py`.
+3. El paper de 1997, sección 3 y Apéndice A.
+4. El paper de 1997, sección 4 y Broadie, Glasserman y Jain (1997), para el control variate.
+5. Longstaff y Schwartz (2001), para comparar con el método de regresión.
+6. El capítulo 8 de Glasserman (2003), para una exposición de texto.
+7. Broadie y Glasserman (2004), para la malla estocástica en dimensión alta.
+
+La consigna del trabajo práctico pide `b = 3`. Con ese valor el sesgo de los dos estimadores es grande y el intervalo queda ancho; sirve como punto de partida y para mostrar la convergencia al aumentar `b`.
