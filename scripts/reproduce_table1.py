@@ -5,8 +5,7 @@ ejercicio (d = 3). La opción es un call americano con K = 100, r = 0.05,
 delta = 0.10, T = 1 y sigma = 0.2. Los valores "verdad" son los del paper.
 
 Uso:
-    python scripts/reproduce_table1.py
-    python scripts/reproduce_table1.py --quick
+    python scripts/reproduce_table1.py --branches 50 --replications 100
 """
 
 from __future__ import annotations
@@ -30,14 +29,12 @@ PAPER_TRUE_VALUES = {
 def main() -> int:
     """Corre la tabla y devuelve el código de salida."""
     parser = argparse.ArgumentParser(description="Reproduce la Tabla 1 del paper.")
-    parser.add_argument("--quick", action="store_true", help="usa menos réplicas y ramas")
+    parser.add_argument("--branches", type=int, default=50, help="ramas por nodo b")
+    parser.add_argument("--replications", type=int, default=100, help="cantidad de árboles n")
     parser.add_argument("--seed", type=int, default=20261017, help="semilla del generador")
     args = parser.parse_args()
 
-    if args.quick:
-        replications, branching = 20, 10
-    else:
-        replications, branching = 100, 50
+    replications, branching = args.replications, args.branches
 
     header = (
         f"{'S0':>6} {'bajo':>9} {'alto':>9} "

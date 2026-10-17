@@ -1,10 +1,11 @@
 """Tests del árbol simulado y de los estimadores alto y bajo."""
 
+import math
 import unittest
 
 import numpy as np
 
-from bg_pricing.model import Market, Option, black_scholes_european
+from bg_pricing.model import Market, Option
 from bg_pricing.tree import simulate_levels, tree_estimates
 
 
@@ -21,13 +22,11 @@ class HandComputedTreeTests(unittest.TestCase):
         self.assertAlmostEqual(estimate.high, 40.0 / 3.0, places=12)
         self.assertAlmostEqual(estimate.low, 20.0 / 3.0, places=12)
 
-    def test_zero_steps(self):
+    def test_zero_steps_raise(self):
         market = Market(spot=90.0, rate=0.05)
         option = Option(strike=100.0, maturity=1.0, kind="put")
-        estimate = tree_estimates([np.array([90.0])], market, option, branching=3)
-        self.assertAlmostEqual(estimate.high, 10.0)
-        self.assertAlmostEqual(estimate.low, 10.0)
-        self.assertAlmostEqual(estimate.european, 10.0)
+        with self.assertRaises(ValueError):
+            tree_estimates([np.array([90.0])], market, option, branching=3)
 
     def test_mismatched_levels_raise(self):
         market = Market(spot=100.0, rate=0.05)
@@ -64,15 +63,22 @@ class SimulatedTreeTests(unittest.TestCase):
         self.assertAlmostEqual(estimate.high, 50.0, places=8)
         self.assertAlmostEqual(estimate.low, 50.0, places=8)
 
-    def test_zero_volatility_call_equals_european(self):
+    def test_zero_volatility_call_matches_forward(self):
+        # Con volatilidad cero el activo crece a la tasa forward y el call
+        # americano vale lo mismo que el europeo: S e^{-delta T} - K e^{-r T}.
         market = Market(spot=100.0, rate=0.05, dividend=0.0, volatility=0.0)
         option = Option(strike=90.0, maturity=1.0, kind="call")
         rng = np.random.default_rng(3)
         levels = simulate_levels(market, option, steps=4, branching=3, rng=rng)
         estimate = tree_estimates(levels, market, option, branching=3)
-        expected = black_scholes_european(market, option)
+        expected = 100.0 - 90.0 * math.exp(-0.05)
         self.assertAlmostEqual(estimate.high, expected, places=8)
         self.assertAlmostEqual(estimate.low, expected, places=8)
+
+    def test_zero_steps_raise(self):
+        rng = np.random.default_rng(5)
+        with self.assertRaises(ValueError):
+            simulate_levels(self.market, self.call, steps=0, branching=3, rng=rng)
 
     def test_invalid_branching(self):
         rng = np.random.default_rng(4)

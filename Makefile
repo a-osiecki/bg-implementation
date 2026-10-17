@@ -10,7 +10,7 @@ lint:
 	python3 -m ruff check .
 
 reproduce:
-	python3 scripts/reproduce_table1.py --quick
+	python3 scripts/reproduce_table1.py --branches 10 --replications 20
 
 clean:
 	rm -rf build dist .pytest_cache .ruff_cache src/*.egg-info

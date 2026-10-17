@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from math import sqrt
+from math import exp, sqrt
 from statistics import NormalDist
 
 import numpy as np
@@ -19,6 +19,8 @@ class BGResult:
     low_mean y high_mean promedian n árboles independientes. ci_low y ci_high
     forman el intervalo conservador de la ecuación (9) del paper. point es el
     promedio de los dos estimadores, truncado por el ejercicio inmediato.
+    european_mean y european_true quedan en nan si el control variate está
+    apagado.
     """
 
     low_mean: float
@@ -35,18 +37,6 @@ class BGResult:
     control_variate: bool
     european_mean: float
     european_true: float
-
-    @property
-    def halfwidth(self) -> float:
-        """Semiancho del intervalo de confianza."""
-        return 0.5 * (self.ci_high - self.ci_low)
-
-    @property
-    def relative_halfwidth(self) -> float:
-        """Semiancho dividido por el precio puntual."""
-        if self.point == 0.0:
-            return float("inf")
-        return self.halfwidth / self.point
 
 
 def _apply_control_variate(
@@ -89,8 +79,8 @@ def price_american(
     control_variate: usa el valor europeo del mismo árbol como control.
     seed: semilla del generador aleatorio.
     """
-    if steps < 0:
-        raise ValueError("steps no puede ser negativo")
+    if steps < 1:
+        raise ValueError("steps tiene que ser al menos 1")
     if branching < 2:
         raise ValueError("branching tiene que ser al menos 2 para el estimador bajo")
     if replications < 2:
@@ -101,19 +91,24 @@ def price_american(
     rng = np.random.default_rng(seed)
     highs = np.empty(replications)
     lows = np.empty(replications)
-    europeans = np.empty(replications)
+    europeans = np.empty(replications) if control_variate else None
+    discount = exp(-market.rate * option.maturity)
 
     for i in range(replications):
         levels = simulate_levels(market, option, steps, branching, rng)
         estimate = tree_estimates(levels, market, option, branching)
         highs[i] = estimate.high
         lows[i] = estimate.low
-        europeans[i] = estimate.european
+        if europeans is not None:
+            europeans[i] = discount * payoff(levels[-1], option).mean()
 
-    european_true = black_scholes_european(market, option)
-    if control_variate:
+    european_mean = float("nan")
+    european_true = float("nan")
+    if europeans is not None:
+        european_true = black_scholes_european(market, option)
         highs = _apply_control_variate(highs, europeans, european_true)
         lows = _apply_control_variate(lows, europeans, european_true)
+        european_mean = float(europeans.mean())
 
     low_mean = float(lows.mean())
     high_mean = float(highs.mean())
@@ -139,6 +134,6 @@ def price_american(
         steps=steps,
         branching=branching,
         control_variate=control_variate,
-        european_mean=float(europeans.mean()),
+        european_mean=european_mean,
         european_true=european_true,
     )
