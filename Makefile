@@ -1,4 +1,4 @@
-.PHONY: install test lint example reproduce clean
+.PHONY: install test lint reproduce clean
 
 install:
 	python3 -m pip install -e ".[dev]"
@@ -8,9 +8,6 @@ test:
 
 lint:
 	python3 -m ruff check .
-
-example:
-	python3 -m bg_pricing --steps 3 --branches 3 --replications 100 --seed 42
 
 reproduce:
 	python3 scripts/reproduce_table1.py --quick

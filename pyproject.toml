@@ -16,9 +16,6 @@ dependencies = ["numpy>=1.26"]
 [project.optional-dependencies]
 dev = ["pytest>=8", "ruff>=0.6"]
 
-[project.scripts]
-bg-pricing = "bg_pricing.cli:main"
-
 [tool.setuptools.packages.find]
 where = ["src"]
 
