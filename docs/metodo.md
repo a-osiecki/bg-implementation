@@ -139,7 +139,7 @@ La función `simulate_levels(market, option, steps, branching, rng)` genera los 
 
 La función `tree_estimates(levels, market, option, branching)` recorre los niveles al revés. En la madurez calcula el payoff. En cada nivel anterior reconstruye la matriz de hijos, calcula el promedio de las ramas y aplica las fórmulas del estimador alto y del estimador bajo. La operación `where` de numpy aplica la decisión de ejercicio de las `b` pasadas del estimador bajo a la vez.
 
-Esta estrategia guarda `O(b^d)` precios y usa operaciones vectorizadas. El Apéndice C del paper usa un recorrido en profundidad con `O(b d)` memoria. Para los tamaños de este trabajo práctico la memoria no es un problema, y la versión vectorizada es más rápida en Python. Una recursión en profundidad como la del Apéndice C usaría `O(b d)` memoria en lugar de `O(b^d)`, a costa de velocidad.
+Esta estrategia guarda los precios de todos los niveles, `O(b^d)` en total, y a cambio vectoriza con numpy y evita la llamada a función por nodo que tendría una recursión en Python. El recorrido en profundidad del Apéndice C usa `O(b d)` memoria, mucho menos que esos `O(b^d)` precios, pero en Python es más lento por el costo de cada llamada a función. Para los tamaños de este trabajo práctico la memoria no es un problema. Con `b = 50` y `d = 3` hay 127551 nodos en total y alrededor de 1 MB en flotantes. El script `scripts/reproduce_table1.py` reproduce la Tabla 1 del paper en segundos. Queda como mejora futura pasar a un recorrido en profundidad si `d` crece o la memoria aprieta.
 
 La descripción de cada función está en `docs/referencia-api.md`.
 
